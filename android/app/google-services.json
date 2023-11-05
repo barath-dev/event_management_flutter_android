@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "764057356098",
+    "project_id": "young-minds-6d376",
+    "storage_bucket": "young-minds-6d376.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764057356098:android:2ad91ea53dd9a66d022adb",
+        "android_client_info": {
+          "package_name": "com.example.young_minds"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcgH0_UFRtWtOblHkJ9nC9RpQcGNj8o68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
