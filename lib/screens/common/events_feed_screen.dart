@@ -28,6 +28,9 @@ class _EventFeedState extends State<EventFeed> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     return EventCard(
+                      myevent: false,
+                      // requests: snapshot.data!.docs[index]['requests'],
+                      eid: snapshot.data!.docs[index]['id'],
                       url: snapshot.data!.docs[index]['imgUrl'],
                       title: snapshot.data!.docs[index]['event'],
                       description: snapshot.data!.docs[index]['description'],

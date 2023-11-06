@@ -14,13 +14,19 @@ class _EventistState extends State<Eventist> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('events').where('id',isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('events')
+          .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 return EventCard(
+                  // requests: snapshot.data!.docs[index]['requests'] as List<String>,
+                  myevent: true,
+                  eid: snapshot.data!.docs[index]['id'],
                   url: snapshot.data!.docs[index]['imgUrl'],
                   title: snapshot.data!.docs[index]['event'],
                   description: snapshot.data!.docs[index]['description'],

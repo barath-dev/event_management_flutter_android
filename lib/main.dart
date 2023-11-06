@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:young_minds/firebase_options.dart';
 import 'package:young_minds/screens/admin/dashboard.dart';
 import 'package:young_minds/screens/auth/registration_screen.dart';
-import 'package:young_minds/screens/common/events_feed_screen.dart';
 import 'package:young_minds/screens/common/navigation_screen.dart';
 import 'package:young_minds/screens/coordinator/coordinator_navigation.dart';
 
@@ -39,7 +38,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: EventFeed(),
+      home: NavigationScreen(),
       // home: StreamBuilder(
       //   stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot) {
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
       //             'blMCKYP9VeRMk5d0Nla3neeeOMu1') {
       //           return const CreateCoordinator();
       //         } else if (FirebaseAuth.instance.currentUser!.email!
-      //             .contains('coordinator@')) {
+      //             .contains('@coordinator')) {
       //           return const NavCoord();
       //         } else {
       //           return const NavigationScreen();

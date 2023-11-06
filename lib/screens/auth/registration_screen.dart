@@ -76,12 +76,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
 
-    @override
-    void didChangeAppLifecycleState(AppLifecycleState state) {
-      if (state == AppLifecycleState.paused) {
-        FocusScope.of(context).requestFocus(FocusNode());
-      }
-    }
+    // @override
+    // void didChangeAppLifecycleState(AppLifecycleState state) {
+    //   if (state == AppLifecycleState.paused) {
+    //     FocusScope.of(context).requestFocus(FocusNode());
+    //   }
+    // }
 
     return Scaffold(
         body: SingleChildScrollView(
