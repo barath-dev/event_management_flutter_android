@@ -12,18 +12,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text(
-            'Profile',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.black),
-      body: Center(
-          child: TextButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              child: Text('Logout'))),
-    );
+        backgroundColor: const Color.fromARGB(155, 158, 158, 158),
+        body: Center(
+            child: ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                child: const Text('Sign Out'))));
   }
 }

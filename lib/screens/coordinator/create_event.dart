@@ -1,12 +1,35 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print, unused_element, prefer_const_constructors
 
+import 'dart:typed_data';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:young_minds/resources/DBmethods.dart';
+import 'package:young_minds/resources/StorageMethods.dart';
+import 'package:young_minds/utils/utils.dart';
 import 'package:young_minds/widgets/text_input.dart';
+import 'package:image_picker/image_picker.dart';
 
 List<String> list = <String>['Not Selected', 'Techinical', 'Non Techinical'];
-List<String> list_techinical = <String>['Techinical', 'Non Techinical'];
-List<String> list_non_techinical = <String>['Techinical', 'Non Techinical'];
-List<String> list2 = <String>[];
+List<String> list_techinical = <String>[
+  '	Hackathons',
+  'Technical Quiz',
+  'Technical seminars',
+  'Technical conference',
+  'Technical workshops',
+  'Paper presentation',
+  'Poster presentations',
+  'Idea pitching'
+];
+List<String> list_non_techinical = <String>[
+  'quiz',
+  'cultural fests',
+  'seminars',
+  'sports',
+  'treasure hunt'
+];
+List<String> Unit = <String>['Choose', 'Days', 'Hours'];
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});
@@ -19,17 +42,158 @@ class _CreateEventState extends State<CreateEvent> {
   TextEditingController event_name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController venue = TextEditingController();
+  TextEditingController duration = TextEditingController();
+  TextEditingController institute = TextEditingController();
+  String unit = Unit.first;
+  String event_type = '';
 
   String dropdownValue = list.first;
+
+  _ChooseEvent() {
+    if (dropdownValue == 'Techinical') {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Choose Event'),
+              content: SizedBox(
+                height: 200,
+                width: 200,
+                child: ListView.builder(
+                  itemCount: list_techinical.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(list_techinical[index]),
+                      onTap: () {
+                        setState(() {
+                          event_type = list_techinical[index];
+                        });
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          });
+    } else if (dropdownValue == 'Non Techinical') {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Choose Event'),
+              content: SizedBox(
+                height: 200,
+                width: 200,
+                child: ListView.builder(
+                  itemCount: list_non_techinical.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(list_non_techinical[index]),
+                      onTap: () {
+                        setState(() {
+                          event_type = list_techinical[index];
+                        });
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            );
+          });
+    }
+    if (dropdownValue == 'Not Selected') {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              title: Text('Choose Event'),
+              content: Text('Please Select Event Type'),
+            );
+          });
+    }
+  }
+
+  Uint8List? _file;
+  bool _filepicked = false;
+  String url = '';
+
+  Future<void> uploadImage() async {
+    print('uploading image');
+    StorageMethods storageMethods = StorageMethods();
+    url = await storageMethods.uploadImagetoStorage(_file!);
+    print('upload image success');
+    print(url);
+  }
+
+  void _selectImage() async {
+    Uint8List image = await PickImage(ImageSource.gallery);
+    _filepicked = true;
+    setState(() {
+      _file = image;
+      print('image selected');
+    });
+  }
+
+  Future<void> uploadEvent() async {
+    print('uploading event');
+    String result = await DBmethods().uploadEvent(
+      type: dropdownValue,
+      event: event_type,
+      description: description.text,
+      date_time: DateTime.now().toString(),
+      venue: venue.text,
+      duration: duration.text,
+      imgUrl: url,
+      inst: institute.text,
+      id: FirebaseAuth.instance.currentUser!.uid,
+    );
+    print(result);
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Event'),
+        title: const Text(
+          'Create Event',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(
+              height: 20,
+            ),
+            !(_filepicked)
+                ? const CircleAvatar(
+                    backgroundColor: Color.fromARGB(0, 0, 0, 0),
+                    backgroundImage: AssetImage('assets/images/add.jpg'),
+                    radius: 50,
+                  )
+                : CircleAvatar(
+                    backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                    backgroundImage: MemoryImage(_file!),
+                    radius: 50,
+                  ),
+            TextButton(
+                onPressed: () {
+                  print('tapped');
+                  _selectImage();
+                },
+                child: Text('Upload Image')),
+            const SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInput(hint: 'Event Name', controller: event_name),
@@ -44,48 +208,50 @@ class _CreateEventState extends State<CreateEvent> {
             const SizedBox(
               height: 10,
             ),
-            DropdownButton<String>(
-              value: dropdownValue,
-              onChanged: (String? value) => {
-                setState(() {
-                  if (value == 'Techinical') {
-                    list2 = list_techinical;
-                  }
-                  if (value == 'Non Techinical') {
-                    list2 = list_non_techinical;
-                  }
-                  dropdownValue = value!;
-                })
-              },
-              items: list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    // style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }).toList(),
+            const Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Event Category',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            DropdownButton<String>(
-              value: dropdownValue,
-              onChanged: (String? value) => {
-                setState(() {
-                  dropdownValue = value!;
-                })
-              },
-              items: list2.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    // style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }).toList(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  onChanged: (String? value) => {
+                    setState(() {
+                      dropdownValue = value!;
+                    })
+                  },
+                  items: list.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        // style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        _ChooseEvent();
+                      },
+                      child:
+                          Text(event_type == '' ? 'Choose Event' : event_type)),
+                ),
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -95,34 +261,68 @@ class _CreateEventState extends State<CreateEvent> {
               child: TextInput(hint: 'Venue', controller: venue),
             ),
             const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextInput(hint: 'Event Name', controller: institute),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Spacer(),
+                TextInput(
+                    hint: 'Duration',
+                    keybordType: TextInputType.number,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    controller: duration),
+                Spacer(),
+                DropdownButton<String>(
+                  value: unit,
+                  onChanged: (String? value) => {
+                    setState(() {
+                      unit = value!;
+                    })
+                  },
+                  items: Unit.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        // style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                Spacer()
+              ],
+            ),
+            const SizedBox(
               height: 20,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 90),
-              child: InkWell(
-                onTap: () {},
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(239, 109, 77, 1),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: const Center(
-                    child: Text(
-                      'Create Event',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
+              child: ElevatedButton(
+                onPressed: () async {
+                  await uploadImage();
+                  await uploadEvent();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                ),
+                child: const Text(
+                  'Create Event',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ),
             ),
             const SizedBox(
               height: 20,
-            ),
-            const SizedBox(
-              height: 75,
             ),
           ],
         ),

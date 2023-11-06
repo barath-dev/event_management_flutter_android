@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:young_minds/resources/Authmethods.dart';
+import 'package:young_minds/screens/admin/dashboard.dart';
 import 'package:young_minds/screens/auth/registration_screen.dart';
 import 'package:young_minds/screens/common/events_feed_screen.dart';
+import 'package:young_minds/screens/common/navigation_screen.dart';
+import 'package:young_minds/screens/coordinator/coordinator_navigation.dart';
 import 'package:young_minds/widgets/text_input.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -18,10 +23,32 @@ class LoginScreen extends StatelessWidget {
           .then((value) => {
                 if (value == 'success')
                   {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EventFeed()))
+                    if (FirebaseAuth.instance.currentUser!.email
+                        .toString()
+                        .contains('admin'))
+                      {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateCoordinator()))
+                      }
+                    else if (FirebaseAuth.instance.currentUser!.email
+                        .toString()
+                        .contains('coordinator'))
+                      {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const NavCoord()))
+                      }
+                    else
+                      {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const NavigationScreen()))
+                      }
                   }
               });
     }

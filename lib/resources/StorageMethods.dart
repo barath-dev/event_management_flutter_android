@@ -14,7 +14,7 @@ class StorageMethods {
   Future<String> uploadImagetoStorage(Uint8List file) async {
     Reference ref = _storage
         .ref()
-        .child('food_items')
+        .child('images')
         .child(_auth.currentUser!.uid)
         .child('${const Uuid().v4()}.jpg');
 

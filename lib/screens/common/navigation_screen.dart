@@ -12,51 +12,48 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Spacer(),
-          Text(
-            'Young Minds',
-            style: TextStyle(
-                color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EventFeed()));
-                  },
-                  icon: const Icon(
-                    Icons.home,
-                    color: Colors.black,
-                  )),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.event,
-                    color: Colors.black,
-                  )),
-              IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ProfileScreen()));
-                  },
-                  icon: const Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  )),
-            ],
-          ),
-          Spacer(),
-        ],
-      ),
+    return Column(
+      children: [
+        const Spacer(),
+        const Text(
+          'Young Minds',
+          style: TextStyle(
+              color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EventFeed()));
+                },
+                icon: const Icon(
+                  Icons.home,
+                  color: Colors.black,
+                )),
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.event,
+                  color: Colors.black,
+                )),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProfileScreen()));
+                },
+                icon: const Icon(
+                  Icons.person,
+                  color: Colors.black,
+                )),
+          ],
+        ),
+      ],
     );
   }
 }
