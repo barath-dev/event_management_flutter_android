@@ -20,16 +20,32 @@ class _EventFeedState extends State<EventFeed> {
           ),
           backgroundColor: Colors.black,
         ),
-        body: const SingleChildScrollView(
-            child: Column(
-                children: [
-              EventCard(
-                title: 'Event Name',
-                description: 'Event Description',
-                venue: 'Event Venue',
-                date: 'Event Date',
-                time: 'Event Time',
-              )
-            ])));
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection('events').snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return EventCard(
+                      url: snapshot.data!.docs[index]['imgUrl'],
+                      title: snapshot.data!.docs[index]['event'],
+                      description: snapshot.data!.docs[index]['description'],
+                      date: snapshot.data!.docs[index]['date_time']
+                          .toString()
+                          .substring(0, 10),
+                      time: snapshot.data!.docs[index]['date_time']
+                          .toString()
+                          .substring(11, 16),
+                      venue: snapshot.data!.docs[index]['venue'],
+                    );
+                  });
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ));
   }
 }

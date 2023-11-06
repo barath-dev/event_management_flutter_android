@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
@@ -7,12 +10,16 @@ class EventCard extends StatelessWidget {
   final String description;
   final String venue;
   final String date;
+  final String url;
   final String time;
+  final String eid;
   const EventCard(
       {super.key,
       required this.title,
       required this.description,
+      required this.url,
       required this.venue,
+      required this.eid,
       required this.date,
       required this.time});
 
@@ -36,8 +43,9 @@ class EventCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20),
-                image: const DecorationImage(
-                    image: AssetImage('assets/images/background.jpg'))),
+                image: DecorationImage(
+                  image: NetworkImage(url),
+                )),
           ),
           const SizedBox(
             width: 20,
@@ -78,6 +86,17 @@ class EventCard extends StatelessWidget {
                 time,
                 style: const TextStyle(fontSize: 18),
               ),
+              TextButton(
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('events')
+                        .doc(eid)
+                        .update({
+                      'requests': FieldValue.arrayUnion(
+                          [FirebaseAuth.instance.currentUser!.email])
+                    });
+                  },
+                  child: const Text('Register'))
             ],
           ),
         ],

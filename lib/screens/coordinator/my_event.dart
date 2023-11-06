@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:young_minds/widgets/event_card.dart';
 
 class Eventist extends StatefulWidget {
   const Eventist({super.key});
@@ -13,20 +14,23 @@ class _EventistState extends State<Eventist> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('events')
-          .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .snapshots(),
+      stream: FirebaseFirestore.instance.collection('events').where('id',isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  tileColor: Colors.grey[200],
-                  leading: Image.network(snapshot.data!.docs[index]['imgUrl']),
-                  title: Text(snapshot.data!.docs[index]['event']),
-                  subtitle: Text(snapshot.data!.docs[index]['description']),
+                return EventCard(
+                  url: snapshot.data!.docs[index]['imgUrl'],
+                  title: snapshot.data!.docs[index]['event'],
+                  description: snapshot.data!.docs[index]['description'],
+                  date: snapshot.data!.docs[index]['date_time']
+                      .toString()
+                      .substring(0, 10),
+                  time: snapshot.data!.docs[index]['date_time']
+                      .toString()
+                      .substring(11, 16),
+                  venue: snapshot.data!.docs[index]['venue'],
                 );
               });
         } else {

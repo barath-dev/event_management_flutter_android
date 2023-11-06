@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 class DBmethods {
   Future<String> uploadEvent(
@@ -15,14 +16,16 @@ class DBmethods {
       required String imgUrl,
       required String id}) async {
     try {
+      String eid = Uuid().v4();
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      firestore.collection('events').doc().set({
+      firestore.collection('events').doc(eid).set({
         'type': type,
         'description': description,
         'date_time': date_time,
         'duration': duration,
         'venue': venue,
         'institution': inst,
+        'eid': eid,
         'event': event,
         'id': id,
         'imgUrl': imgUrl,

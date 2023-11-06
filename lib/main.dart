@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:young_minds/firebase_options.dart';
 import 'package:young_minds/screens/admin/dashboard.dart';
 import 'package:young_minds/screens/auth/registration_screen.dart';
+import 'package:young_minds/screens/common/events_feed_screen.dart';
 import 'package:young_minds/screens/common/navigation_screen.dart';
 import 'package:young_minds/screens/coordinator/coordinator_navigation.dart';
 
@@ -38,32 +39,33 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) {
-              if (FirebaseAuth.instance.currentUser!.uid ==
-                  'blMCKYP9VeRMk5d0Nla3neeeOMu1') {
-                return const CreateCoordinator();
-              } else if (FirebaseAuth.instance.currentUser!.email!
-                  .contains('coordinator@')) {
-                return const NavCoord();
-              } else {
-                return const NavigationScreen();
-              }
-            } else if (snapshot.hasError) {
-              return Center(child: Text("${snapshot.error}"));
-            }
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return const SignUpScreen();
-        },
-      ),
+      home: EventFeed(),
+      // home: StreamBuilder(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.active) {
+      //       if (snapshot.hasData) {
+      //         if (FirebaseAuth.instance.currentUser!.uid ==
+      //             'blMCKYP9VeRMk5d0Nla3neeeOMu1') {
+      //           return const CreateCoordinator();
+      //         } else if (FirebaseAuth.instance.currentUser!.email!
+      //             .contains('coordinator@')) {
+      //           return const NavCoord();
+      //         } else {
+      //           return const NavigationScreen();
+      //         }
+      //       } else if (snapshot.hasError) {
+      //         return Center(child: Text("${snapshot.error}"));
+      //       }
+      //     }
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(
+      //         child: CircularProgressIndicator(),
+      //       );
+      //     }
+      //     return const SignUpScreen();
+      //   },
+      // ),
     );
   }
 }
