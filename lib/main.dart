@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:young_minds/firebase_options.dart';
 import 'package:young_minds/screens/admin/dashboard.dart';
 import 'package:young_minds/screens/auth/create_account.dart';
+import 'package:young_minds/screens/auth/registration_screen.dart';
 import 'package:young_minds/screens/coordinator/coordinator_navigation.dart';
 import 'package:young_minds/screens/student/student_navigation.dart';
 
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          return const SignUpScreen();
+          return const RegisterScreen();
         },
       ),
     );
