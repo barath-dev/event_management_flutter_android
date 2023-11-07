@@ -30,7 +30,7 @@ class _EventFeedState extends State<EventFeed> {
                     return EventCard(
                       myevent: false,
                       // requests: snapshot.data!.docs[index]['requests'],
-                      eid: snapshot.data!.docs[index]['id'],
+                      eid: snapshot.data!.docs[index]['eid'],
                       url: snapshot.data!.docs[index]['imgUrl'],
                       title: snapshot.data!.docs[index]['event'],
                       description: snapshot.data!.docs[index]['description'],

@@ -2,9 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:young_minds/screens/services/email_services.dart';
 
 class EventCard extends StatefulWidget {
   final String title;
@@ -25,7 +23,6 @@ class EventCard extends StatefulWidget {
       required this.myevent,
       required this.venue,
       required this.eid,
-      // required this.requests,
       required this.date,
       required this.time});
 
@@ -38,7 +35,7 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       decoration: BoxDecoration(
           color: Colors.white,

@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:young_minds/resources/Authmethods.dart';
 import 'package:young_minds/screens/admin/dashboard.dart';
-import 'package:young_minds/screens/auth/registration_screen.dart';
-import 'package:young_minds/screens/common/events_feed_screen.dart';
+import 'package:young_minds/screens/auth/create_account.dart';
 import 'package:young_minds/screens/common/navigation_screen.dart';
 import 'package:young_minds/screens/coordinator/coordinator_navigation.dart';
 import 'package:young_minds/widgets/text_input.dart';
