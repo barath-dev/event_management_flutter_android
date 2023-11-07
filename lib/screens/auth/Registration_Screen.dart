@@ -48,14 +48,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password.text.isNotEmpty &&
         name.text.isNotEmpty &&
         dropdownValue != 'Select your institute' &&
-        passingOutYear.text.isNotEmpty &&
+        // passingOutYear.text.isNotEmpty &&
         uniqueId.text.isNotEmpty) {
       String result = await Authmethods().signUpuser(
           email: email.text,
           password: password.text,
           name: name.text,
           institute: institute.text,
-          passingOutYear: passingOutYear.text,
+          // passingOutYear: passingOutYear.text,
           uniqueId: uniqueId.text);
       if (result == 'success') {
         ScaffoldMessenger.of(context).showSnackBar(

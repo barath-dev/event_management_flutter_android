@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:young_minds/resources/Authmethods.dart';
 import 'package:young_minds/screens/admin/dashboard.dart';
-import 'package:young_minds/screens/auth/create_account.dart';
+import 'package:young_minds/screens/auth/registration_screen.dart';
 import 'package:young_minds/screens/common/navigation_screen.dart';
 import 'package:young_minds/screens/coordinator/coordinator_navigation.dart';
 import 'package:young_minds/widgets/text_input.dart';
@@ -133,7 +133,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SignUpScreen()));
+                          builder: (context) => const RegisterScreen()));
                 },
                 child: const Text("Sign up",
                     style: TextStyle(color: Colors.white)),

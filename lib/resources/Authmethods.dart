@@ -7,7 +7,7 @@ class Authmethods {
       required String password,
       required String name,
       required String institute,
-      required String passingOutYear,
+      // required String passingOutYear,
       required String uniqueId}) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
@@ -21,7 +21,7 @@ class Authmethods {
         'email': email,
         'uniqueId': uniqueId,
         'institute': institute,
-        'passingOutYear': passingOutYear,
+        // 'passingOutYear': passingOutYear,
       });
       return 'success';
     } on Exception catch (e) {
