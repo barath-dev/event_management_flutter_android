@@ -11,7 +11,7 @@ class Authmethods {
       required String uniqueId}) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
-      UserCredential cred= await auth.createUserWithEmailAndPassword(
+      UserCredential cred = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -21,7 +21,14 @@ class Authmethods {
         'email': email,
         'uniqueId': uniqueId,
         'institute': institute,
+        'notifications': [],
         // 'passingOutYear': passingOutYear,
+      });
+      await FirebaseFirestore.instance
+          .collection('notificatios')
+          .doc(cred.user!.email)
+          .set({
+        'notifications': [],
       });
       return 'success';
     } on Exception catch (e) {

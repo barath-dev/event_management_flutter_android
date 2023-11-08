@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:young_minds/screens/auth/registration_screen.dart';
 import 'package:young_minds/widgets/event_card.dart';
 
 class EventFeed extends StatefulWidget {
@@ -14,6 +15,16 @@ class _EventFeedState extends State<EventFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterScreen()));
+                },
+                icon: const Icon(Icons.logout_rounded))
+          ],
           title: const Text(
             'Event Feed',
             style: TextStyle(color: Colors.white),
@@ -28,6 +39,7 @@ class _EventFeedState extends State<EventFeed> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     return EventCard(
+                      requests: snapshot.data!.docs[index]['requests'],
                       myevent: false,
                       // requests: snapshot.data!.docs[index]['requests'],
                       eid: snapshot.data!.docs[index]['eid'],

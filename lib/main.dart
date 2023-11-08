@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
                   'blMCKYP9VeRMk5d0Nla3neeeOMu1') {
                 return const CreateCoordinator();
               } else if (FirebaseAuth.instance.currentUser!.email!
-                  .contains('@coordinator')) {
+                  .contains('coordinator')) {
                 return const NavCoord();
               } else {
                 return const NavStu();

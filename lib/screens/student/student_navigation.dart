@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:young_minds/screens/common/events_feed_screen.dart';
 import 'package:young_minds/screens/common/profile_screen.dart';
 import 'package:young_minds/screens/coordinator/my_event.dart';
+import 'package:young_minds/screens/student/event_notifications_screen.dart';
 
 class NavStu extends StatefulWidget {
   const NavStu({super.key});
@@ -14,7 +15,7 @@ class _NavStuState extends State<NavStu> {
   int _pageindex = 0;
   final List<Widget> _children = [
     const EventFeed(),
-    const Eventist(),
+    const NotificationScreen(),
     const ProfileScreen(),
   ];
 

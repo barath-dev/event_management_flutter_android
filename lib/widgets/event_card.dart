@@ -3,6 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:young_minds/screens/coordinator/email_screen.dart';
+import 'package:young_minds/screens/coordinator/requests.dart';
+import 'package:young_minds/screens/coordinator/send_notification_scree.dart';
 
 class EventCard extends StatefulWidget {
   final String title;
@@ -12,12 +15,14 @@ class EventCard extends StatefulWidget {
   final bool myevent;
   final String url;
   final String time;
+  final dynamic requests;
   // final List<String> requests;
   final String eid;
 
   const EventCard(
       {super.key,
       required this.title,
+      required this.requests,
       required this.description,
       required this.url,
       required this.myevent,
@@ -96,30 +101,73 @@ class _EventCardState extends State<EventCard> {
                 widget.time,
                 style: const TextStyle(fontSize: 18),
               ),
-              TextButton(
-                  onPressed: () {
-                    print(widget.eid);
-                    print(FirebaseAuth.instance.currentUser!.email);
-                    if (widget.myevent) {
-                      // EmailServices().send(widget.requests);
-                    } else {
-                      FirebaseFirestore.instance
-                          .collection('events')
-                          .doc(widget.eid)
-                          .update({
-                        'requests': FieldValue.arrayUnion(
-                            [FirebaseAuth.instance.currentUser!.email])
-                      });
-                      setState(() {
-                        willing = true;
-                      });
-                    }
-                  },
-                  child: Text(widget.myevent
-                      ? 'Send confirmation Mail'
-                      : willing
-                          ? "You will be notified"
-                          : "Intrested"))
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                // ignore: prefer_interpolation_to_compose_strings
+                widget.requests.length.toString() + " people interested",
+                style: const TextStyle(fontSize: 18),
+              ),
+              !widget.myevent
+                  ? TextButton(
+                      onPressed: () {
+                        print(widget.eid);
+                        print(FirebaseAuth.instance.currentUser!.email);
+                        if (widget.myevent) {
+                          // EmailServices().send(widget.requests);
+                        } else {
+                          FirebaseFirestore.instance
+                              .collection('events')
+                              .doc(widget.eid)
+                              .update({
+                            'requests': FieldValue.arrayUnion(
+                                [FirebaseAuth.instance.currentUser!.email])
+                          });
+                          setState(() {
+                            willing = true;
+                          });
+                        }
+                      },
+                      child:
+                          Text(willing ? "You will be notified" : "Intrested"))
+                  : Text(''),
+              widget.myevent
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ViewRequests(
+                                      eid: widget.eid,
+                                    )));
+                      },
+                      child: const Text('View interstead \nstudents'))
+                  : const Text(''),
+              widget.myevent
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EmailScreen(
+                                      emails: widget.requests,
+                                    )));
+                      },
+                      child: const Text('Send confirmation \nemail'))
+                  : const Text(''),
+              widget.myevent
+                  ? ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SendNotification(
+                                      requests: widget.requests,
+                                    )));
+                      },
+                      child: const Text('Send confirmation \n notification'))
+                  : const Text(''),
             ],
           ),
         ],

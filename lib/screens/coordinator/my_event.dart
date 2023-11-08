@@ -30,13 +30,17 @@ class _EventistState extends State<Eventist> {
                   url: snapshot.data!.docs[index]['imgUrl'],
                   title: snapshot.data!.docs[index]['event'],
                   description: snapshot.data!.docs[index]['description'],
-                  date: snapshot.data!.docs[index]['date_time']
+                  date: DateTime.parse(snapshot.data!.docs[index]['date_time']
+                          .toDate()
+                          .toString())
                       .toString()
                       .substring(0, 10),
+
                   time: snapshot.data!.docs[index]['date_time']
                       .toString()
                       .substring(11, 16),
                   venue: snapshot.data!.docs[index]['venue'],
+                  requests: snapshot.data!.docs[index]['requests'],
                 );
               });
         } else {

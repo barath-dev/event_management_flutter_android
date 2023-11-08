@@ -167,6 +167,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
+              child:
+                  TextInput(hint: 'PassOut Year', controller: passingOutYear),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInput(
                 hint: 'Password',
                 controller: password,

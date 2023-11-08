@@ -9,7 +9,7 @@ class DBmethods {
       {required String type,
       required String event,
       required String description,
-      required String date_time,
+      required DateTime date_time,
       required String venue,
       required String inst,
       required String duration,
@@ -46,7 +46,10 @@ class DBmethods {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: coordinatorEmail, password: password);
 
-      FirebaseFirestore.instance.collection('coordinators').doc(Institute).set({
+      await FirebaseFirestore.instance
+          .collection('coordinators')
+          .doc(Institute)
+          .set({
         'name': coordinatorName,
         'email': coordinatorEmail,
         'techinical_events': [],
@@ -54,7 +57,7 @@ class DBmethods {
         'students_participating': 0,
         'students_registered': 0,
         'students_registered_list': [],
-        'inisitute': getInstiuteName(),
+        'inisitute': Institute,
       });
     } catch (e) {
       return e.toString();

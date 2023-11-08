@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:young_minds/resources/DBmethods.dart';
+import 'package:young_minds/screens/auth/registration_screen.dart';
 
 List<String> list = <String>[
   'Select your institute',
@@ -69,6 +70,10 @@ class _CreateCoordinatorState extends State<CreateCoordinator> {
           IconButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterScreen()));
             },
             icon: const Icon(Icons.logout),
           ),

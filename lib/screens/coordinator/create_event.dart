@@ -38,6 +38,11 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  DateTime selectedExpiryDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime selectedPickupDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
   TextEditingController event_name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController venue = TextEditingController();
@@ -141,7 +146,7 @@ class _CreateEventState extends State<CreateEvent> {
       type: dropdownValue,
       event: event_type,
       description: description.text,
-      date_time: DateTime.now().toString(),
+      date_time: selectedPickupDate,
       venue: venue.text,
       duration: duration.text,
       imgUrl: url,
@@ -159,6 +164,14 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
+    Future<DateTime?> pickDate() => showDatePicker(
+        context: context,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100),
+        initialDate: DateTime.now());
+
+    Future<TimeOfDay?> pickTime() =>
+        showTimePicker(context: context, initialTime: TimeOfDay.now());
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -221,6 +234,9 @@ class _CreateEventState extends State<CreateEvent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(
+                  width: 20,
+                ),
                 DropdownButton<String>(
                   value: dropdownValue,
                   onChanged: (String? value) => {
@@ -238,9 +254,7 @@ class _CreateEventState extends State<CreateEvent> {
                     );
                   }).toList(),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ElevatedButton(
@@ -256,18 +270,45 @@ class _CreateEventState extends State<CreateEvent> {
               height: 10,
             ),
             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  Text(
+                    'Date time:',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Spacer(),
+                  ElevatedButton(
+                      onPressed: () async {
+                        final date = await pickDate();
+                        final time = await pickTime();
+                        if (date == null) return;
+                        if (time == null) return;
+
+                        setState(() {
+                          selectedPickupDate = date;
+                          selectedPickupDate = DateTime(
+                              selectedPickupDate.year,
+                              selectedPickupDate.month,
+                              selectedPickupDate.day,
+                              time.hour,
+                              time.minute);
+                        });
+                      },
+                      child: Text(
+                          "${selectedPickupDate.year}/${selectedPickupDate.month}/${selectedPickupDate.day}  ${selectedPickupDate.hour}:${selectedPickupDate.minute}")),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInput(hint: 'Venue', controller: venue),
             ),
             const SizedBox(
               height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextInput(hint: 'Event Name', controller: institute),
-            ),
-            const SizedBox(
-              height: 20,
             ),
             Row(
               children: [
