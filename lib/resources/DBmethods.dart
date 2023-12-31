@@ -9,7 +9,7 @@ class DBmethods {
       {required String type,
       required String event,
       required String description,
-      required DateTime date_time,
+      required String date_time,
       required String venue,
       required String inst,
       required String duration,
@@ -52,6 +52,7 @@ class DBmethods {
           .set({
         'name': coordinatorName,
         'email': coordinatorEmail,
+        'eid': [],
         'techinical_events': [],
         'non_techinical_events': [],
         'students_participating': 0,

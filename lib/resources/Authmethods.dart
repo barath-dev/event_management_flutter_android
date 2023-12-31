@@ -15,7 +15,7 @@ class Authmethods {
           email: email, password: password);
 
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      firestore.collection('users').add({
+      firestore.collection('users').doc(cred.user!.uid).set({
         'name': name,
         'uid': cred.user!.uid,
         'email': email,
@@ -25,7 +25,7 @@ class Authmethods {
         // 'passingOutYear': passingOutYear,
       });
       await FirebaseFirestore.instance
-          .collection('notificatios')
+          .collection('notifications')
           .doc(cred.user!.email)
           .set({
         'notifications': [],

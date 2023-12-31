@@ -45,7 +45,7 @@ class _SendNotificationState extends State<SendNotification> {
                 for (var element in widget.requests) {
                   await FirebaseFirestore.instance
                       .collection('notificatios')
-                      .doc(element)
+                      .doc()
                       .update({
                     'notifications': FieldValue.arrayUnion([
                       {

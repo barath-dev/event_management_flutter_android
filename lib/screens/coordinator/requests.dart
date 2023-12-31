@@ -1,7 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:young_minds/widgets/event_card.dart';
 
 class ViewRequests extends StatefulWidget {
   final String eid;
@@ -14,34 +14,90 @@ class ViewRequests extends StatefulWidget {
 class _ViewRequestsState extends State<ViewRequests> {
   @override
   Widget build(BuildContext context) {
+    print(widget.eid);
     return Scaffold(
-        body: StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('events')
-          .doc(widget.eid)
-          .snapshots(),
-      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        print('aa');
-        if (snapshot.hasData) {
-          print('data');
-          if (snapshot.data!['requests'].isEmpty) {
-            return const Center(
-              child: Text('No requests yet'),
-            );
-          }
-          return ListView.builder(
-              itemCount: snapshot.data!['requests'].length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(snapshot.data!['requests'][index].toString()),
-                );
-              });
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+        body: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 8),
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('events')
+                  .doc(widget.eid)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!['requests'].isEmpty) {
+                    return const Center(
+                      child: Text('No requests yet'),
+                    );
+                  }
+                  return ListView.builder(
+                      itemCount: snapshot.data!['requests'].length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          tileColor: Colors.grey[400],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          title: Text(
+                              "${index + 1}. ${snapshot.data!['requests'][index]}"),
+                        );
+                      });
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.05,
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: const Center(
+                    child: Text(
+                      'Send Notification',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              )),
+              Expanded(
+                  child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: const Center(
+                    child: Text(
+                      'Send email',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ))
+            ],
+          )
+        ],
+      ),
     ));
   }
 }

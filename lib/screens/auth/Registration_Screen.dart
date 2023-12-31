@@ -28,6 +28,17 @@ List<String> list = <String>[
   'KESHAV MEMORIAL INST OF TECHNOLOGY NARAYANAGUDA, HYDERABAD'
 ];
 
+List<String> passingOutYearList = [
+  'Select your passing out year',
+  DateTime.now().year.toString(),
+  (DateTime.now().year + 1).toString(),
+  (DateTime.now().year + 2).toString(),
+  (DateTime.now().year + 3).toString(),
+  (DateTime.now().year + 4).toString(),
+  (DateTime.now().year + 5).toString(),
+  (DateTime.now().year + 6).toString(),
+];
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -42,13 +53,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController institute = TextEditingController();
   TextEditingController passingOutYear = TextEditingController();
   TextEditingController uniqueId = TextEditingController();
+  late String dropdownValue;
+  late String passOut;
+
+  @override
+  void initState() {
+     dropdownValue = list.first;
+     passOut = passingOutYearList.first;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    name.dispose();
+    institute.dispose();
+    passingOutYear.dispose();
+    uniqueId.dispose();
+    super.dispose();
+  }
 
   void register() async {
     if (email.text.isNotEmpty &&
         password.text.isNotEmpty &&
         name.text.isNotEmpty &&
         dropdownValue != 'Select your institute' &&
-        // passingOutYear.text.isNotEmpty &&
         uniqueId.text.isNotEmpty) {
       String result = await Authmethods().signUpuser(
           email: email.text,
@@ -71,8 +101,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           const SnackBar(content: Text('Please fill all the fields')));
     }
   }
-
-  String dropdownValue = list.first;
 
   @override
   Widget build(BuildContext context) {
@@ -165,10 +193,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child:
-                  TextInput(hint: 'PassOut Year', controller: passingOutYear),
+            Container(
+              color: Colors.white,
+              width: MediaQuery.of(context).size.width * 0.8,
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownButton<String>(
+                itemHeight: 75,
+                isExpanded: true,
+                value: passOut,
+                onChanged: (String? value) => {
+                  setState(() {
+                    passOut = value!;
+                  })
+                },
+                items: passingOutYearList
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Column(children: [
+                      Text(
+                        value,
+                        softWrap: true,
+                        // style: TextStyle(color: Colors.white),
+                      ),
+                    ]),
+                  );
+                }).toList(),
+              ),
             ),
             const SizedBox(
               height: 10,

@@ -41,7 +41,7 @@ class _EventCardState extends State<EventCard> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -49,127 +49,137 @@ class _EventCardState extends State<EventCard> {
             BoxShadow(
                 color: Colors.black26, offset: Offset(0, 4), blurRadius: 5)
           ]),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                  image: NetworkImage(widget.url),
-                )),
+          Center(
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.3,
+              width: MediaQuery.of(context).size.width * 0.8,
+              decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.url),
+                  )),
+            ),
           ),
           const SizedBox(
-            width: 20,
+            height: 32,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                softWrap: true,
-                style:
-                    const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.description,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.venue,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.date,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.time,
-                style: const TextStyle(fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                // ignore: prefer_interpolation_to_compose_strings
-                widget.requests.length.toString() + " people interested",
-                style: const TextStyle(fontSize: 18),
-              ),
-              !widget.myevent
-                  ? TextButton(
-                      onPressed: () {
-                        print(widget.eid);
-                        print(FirebaseAuth.instance.currentUser!.email);
-                        if (widget.myevent) {
-                          // EmailServices().send(widget.requests);
-                        } else {
-                          FirebaseFirestore.instance
-                              .collection('events')
-                              .doc(widget.eid)
-                              .update({
-                            'requests': FieldValue.arrayUnion(
-                                [FirebaseAuth.instance.currentUser!.email])
-                          });
-                          setState(() {
-                            willing = true;
-                          });
-                        }
-                      },
-                      child:
-                          Text(willing ? "You will be notified" : "Intrested"))
-                  : Text(''),
-              widget.myevent
-                  ? ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ViewRequests(
-                                      eid: widget.eid,
-                                    )));
-                      },
-                      child: const Text('View interstead \nstudents'))
-                  : const Text(''),
-              widget.myevent
-                  ? ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EmailScreen(
-                                      emails: widget.requests,
-                                    )));
-                      },
-                      child: const Text('Send confirmation \nemail'))
-                  : const Text(''),
-              widget.myevent
-                  ? ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SendNotification(
-                                      requests: widget.requests,
-                                    )));
-                      },
-                      child: const Text('Send confirmation \n notification'))
-                  : const Text(''),
-            ],
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Text(
+              widget.title,
+              softWrap: true,
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+            ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Text(
+              widget.description,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            widget.venue,
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            widget.date,
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            widget.time,
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            // ignore: prefer_interpolation_to_compose_strings
+            widget.requests.length.toString() + " people interested",
+            style: const TextStyle(fontSize: 18),
+          ),
+          const SizedBox(
+            height: 42,
+          ),
+          !widget.myevent
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                  ),
+                  onPressed: () {
+                    print(widget.eid);
+                    print(FirebaseAuth.instance.currentUser!.email);
+                    if (widget.myevent) {
+                      // EmailServices().send(widget.requests);
+                    } else {
+                      FirebaseFirestore.instance
+                          .collection('events')
+                          .doc(widget.eid)
+                          .update({
+                        'requests': FieldValue.arrayUnion(
+                            [FirebaseAuth.instance.currentUser!.email])
+                      });
+                      setState(() {
+                        willing = true;
+                      });
+                    }
+                  },
+                  child: Text(willing ? "You will be notified" : "Intrested",
+                      style: const TextStyle(color: Colors.white)))
+              : const Text(''),
+          widget.myevent
+              ? ElevatedButton(
+                  onPressed: () {
+                    print(widget.eid);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewRequests(
+                                  eid: widget.eid,
+                                )));
+                  },
+                  child: const Text('View interstead students'))
+              : Container(),
+          widget.myevent
+              ? ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EmailScreen(
+                                  emails: widget.requests,
+                                )));
+                  },
+                  child: const Text('Send confirmation email'))
+              : Container(),
+          widget.myevent
+              ? ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SendNotification(
+                                  requests: widget.requests,
+                                )));
+                  },
+                  child: const Text('Send confirmation notification'))
+              : Container(),
         ],
       ),
     );

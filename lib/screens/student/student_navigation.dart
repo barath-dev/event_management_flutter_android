@@ -48,7 +48,11 @@ class _NavStuState extends State<NavStu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Young Minds'),
+        title: const Text(
+          'Young Minds',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
       ),
       body: PageView(
         controller: _pageController,
@@ -56,10 +60,11 @@ class _NavStuState extends State<NavStu> {
         children: _children,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.add,
+              Icons.home_rounded,
               color: _pageindex == 0 ? Colors.purple : Colors.grey,
             ),
             label: "",

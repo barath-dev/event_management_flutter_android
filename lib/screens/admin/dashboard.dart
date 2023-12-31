@@ -40,6 +40,14 @@ class _CreateCoordinatorState extends State<CreateCoordinator> {
   TextEditingController name = TextEditingController();
 
   void upload() async {
+    if (!email.text.contains('coordinator')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a email with coordinator in it.'),
+        ),
+      );
+      return;
+    }
     var res = await DBmethods().createCoordinator(
         coordinatorEmail: email.text,
         coordinatorName: name.text,

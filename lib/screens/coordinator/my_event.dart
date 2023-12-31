@@ -26,13 +26,11 @@ class _EventistState extends State<Eventist> {
                 return EventCard(
                   // requests: snapshot.data!.docs[index]['requests'] as List<String>,
                   myevent: true,
-                  eid: snapshot.data!.docs[index]['id'],
+                  eid: snapshot.data!.docs[index]['eid'],
                   url: snapshot.data!.docs[index]['imgUrl'],
                   title: snapshot.data!.docs[index]['event'],
                   description: snapshot.data!.docs[index]['description'],
-                  date: DateTime.parse(snapshot.data!.docs[index]['date_time']
-                          .toDate()
-                          .toString())
+                  date: snapshot.data!.docs[index]['date_time']
                       .toString()
                       .substring(0, 10),
 

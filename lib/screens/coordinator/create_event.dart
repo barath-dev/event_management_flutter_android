@@ -47,7 +47,6 @@ class _CreateEventState extends State<CreateEvent> {
   TextEditingController description = TextEditingController();
   TextEditingController venue = TextEditingController();
   TextEditingController duration = TextEditingController();
-  TextEditingController institute = TextEditingController();
   String unit = Unit.first;
   String event_type = '';
 
@@ -143,14 +142,14 @@ class _CreateEventState extends State<CreateEvent> {
   Future<void> uploadEvent() async {
     print('uploading event');
     String result = await DBmethods().uploadEvent(
+      inst: FirebaseAuth.instance.currentUser!.uid,
       type: dropdownValue,
       event: event_type,
       description: description.text,
-      date_time: selectedPickupDate,
+      date_time: selectedPickupDate.toString(),
       venue: venue.text,
       duration: duration.text,
       imgUrl: url,
-      inst: institute.text,
       id: FirebaseAuth.instance.currentUser!.uid,
     );
     print(result);

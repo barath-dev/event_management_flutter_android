@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:young_minds/screens/auth/Registration_Screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,6 +18,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: ElevatedButton(
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterScreen()));
                 },
                 child: const Text('Sign Out'))));
   }
