@@ -15,13 +15,11 @@ class EventCard extends StatefulWidget {
   final String date;
 
   final bool myevent;
-  // final bool isRegistered;
   final String url;
   final String link;
   final String time;
   final bool isParticipated;
   final dynamic requests;
-  // final List<String> requests;
   final String eid;
 
   const EventCard(
@@ -31,7 +29,6 @@ class EventCard extends StatefulWidget {
       required this.description,
       required this.url,
       required this.myevent,
-      // required this.isRegistered,
       required this.link,
       required this.isParticipated,
       required this.venue,
@@ -125,7 +122,7 @@ class _EventCardState extends State<EventCard> {
           const SizedBox(
             height: 42,
           ),
-          !widget.myevent
+          !widget.myevent && !widget.isParticipated
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
@@ -144,6 +141,14 @@ class _EventCardState extends State<EventCard> {
                             [FirebaseAuth.instance.currentUser!.email])
                       });
                       FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser!.email)
+                          .update({
+                        'events registered':
+                            FieldValue.arrayUnion([widget.eid]),
+                        'events_registered': FieldValue.increment(1)
+                      });
+                      FirebaseFirestore.instance
                           .collection('notifications')
                           .doc(FirebaseAuth.instance.currentUser!.email)
                           .update({
@@ -151,7 +156,7 @@ class _EventCardState extends State<EventCard> {
                           {
                             'title': 'Registered for ${widget.title}',
                             'description':
-                                'You have successfully registered for ${widget.title}'
+                                'You have successfully registered for ${widget.title} conducted by '
                           }
                         ])
                       });
@@ -202,9 +207,9 @@ class _EventCardState extends State<EventCard> {
           widget.isParticipated
               ? ElevatedButton(
                   onPressed: () {
-                    launchUrl(widget.link as Uri);
+                    launchUrl(Uri.parse(widget.link));
                   },
-                  child: const Text('Send confirmation notification'))
+                  child: const Text('Download Certificate'))
               : Container()
         ],
       ),

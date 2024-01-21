@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:youngmind/widgets/event_card.dart';
 
@@ -19,10 +20,13 @@ class _PartcipatedEventsState extends State<PartcipatedEvents> {
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('events')
-              .where('date_time', isLessThan: DateTime.now().toString())
+              .where('date_time', isLessThanOrEqualTo: Timestamp.now())
+              .where('requests',
+                  arrayContains: FirebaseAuth.instance.currentUser!.email)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
+              print(snapshot.error);
               return const Center(
                 child: Text('Something went wrong'),
               );
@@ -39,11 +43,12 @@ class _PartcipatedEventsState extends State<PartcipatedEvents> {
                 );
               }
 
+              print(snapshot.data!.docs.length);
+
               return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     return EventCard(
-                      
                       link: snapshot.data!.docs[index]['link'],
                       requests: snapshot.data!.docs[index]['requests'],
                       myevent: false,

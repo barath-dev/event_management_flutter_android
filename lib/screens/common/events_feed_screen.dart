@@ -19,7 +19,7 @@ class _EventFeedState extends State<EventFeed> {
         body: StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection('events')
-          .where('date_time', isLessThanOrEqualTo: Timestamp.now())
+          .where('date_time', isGreaterThanOrEqualTo: Timestamp.now())
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -50,11 +50,11 @@ class _EventFeedState extends State<EventFeed> {
                   print(snapshot.data!.docs[index]['requests']);
                   if (index == snapshot.data!.docs.length - 1) {
                     return Container(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 2.5),
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.height / 2.5),
                       child: const Center(
                         child: Text(
-                          'Registered for all events !',
+                          'No more events !',
                           style: TextStyle(fontSize: 26),
                         ),
                       ),
