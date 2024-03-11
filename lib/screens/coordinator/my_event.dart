@@ -26,7 +26,6 @@ class _EventistState extends State<Eventist> {
                 return EventCard(
                   link: snapshot.data!.docs[index]['link'],
                   isParticipated: false,
-                  // requests: snapshot.data!.docs[index]['requests'] as List<String>,
                   myevent: true,
                   eid: snapshot.data!.docs[index]['eid'],
                   url: snapshot.data!.docs[index]['imgUrl'],

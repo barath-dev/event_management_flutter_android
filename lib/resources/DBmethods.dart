@@ -31,6 +31,7 @@ class DBmethods {
         'id': id,
         'imgUrl': imgUrl,
         'requests': [],
+        'inst' : inst,
       });
       return 'success';
     } on Exception catch (e) {
@@ -46,47 +47,14 @@ class DBmethods {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: coordinatorEmail, password: password);
-
-      await FirebaseFirestore.instance
-          .collection('coordinators')
-          .doc(Institute)
-          .set({
-        'name': coordinatorName,
-        'email': coordinatorEmail,
-        'eid': [],
-        'inisitute': Institute,
-      });
     } catch (e) {
       return e.toString();
     }
     return 'success';
   }
 
-  Future<String> getInstiuteName() async {
-    try {
-      String institute = '';
-      await FirebaseFirestore.instance
-          .collection('coordinators')
-          .doc(FirebaseAuth.instance.currentUser!.email)
-          .get()
-          .then((value) {
-        institute = value['inisitute'];
-      });
-      return institute;
-    } catch (e) {
-      return e.toString();
-    }
-  }
 
-  // int getParticipatedEvents() {
-  //   int participatedEvents = 0;
-  //   FirebaseFirestore.instance
-  //       .collection('events')
-  //       .where('requests',
-  //           arrayContains: FirebaseAuth.instance.currentUser!.email)
-  //       .where('date_time', isLessThan: DateTime.now().toString());
-  //   return participatedEvents;
-  // }
+
 
   Future<String> getName() async {
     String name = '';
@@ -101,6 +69,8 @@ class DBmethods {
     return name;
   }
 
+
+
   Future<bool> hasRegistered(String eid) async {
     bool hasRegistered = false;
     await FirebaseFirestore.instance
@@ -113,4 +83,6 @@ class DBmethods {
     });
     return hasRegistered;
   }
+
+
 }
