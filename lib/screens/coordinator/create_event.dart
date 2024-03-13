@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:youngmind/resources/DBmethods.dart';
 import 'package:youngmind/resources/StorageMethods.dart';
 import 'package:youngmind/utils/utils.dart';
@@ -16,14 +17,14 @@ List<String> list = <String>[
   'Technical seminars',
   'Technical conference',
   'Technical workshops',
-  'Techinical__Paper presentation',
-  'Techinical__Poster presentations',
-  'Techinical__Idea pitching',
-  'Non_Techinical__quiz',
-  'Non_Techinical__cultural fests',
-  'Non_Techinical__seminars',
-  'Non_Techinical__sports',
-  'Non_Techinical__treasure hunt'
+  'Techinical Paper presentation',
+  'Techinical Poster presentations',
+  'Techinical Idea pitching',
+  'Non Techinical quiz',
+  'Non Techinical cultural fests',
+  'Non Techinical seminars',
+  'Non Techinical sports',
+  'Non Techinical treasure hunt'
 ];
 
 List<String> Unit = <String>['Choose', 'Days', 'Hours'];
@@ -45,40 +46,10 @@ class _CreateEventState extends State<CreateEvent> {
   TextEditingController link = TextEditingController();
   TextEditingController venue = TextEditingController();
   TextEditingController duration = TextEditingController();
+  TextEditingController title = TextEditingController();
   String unit = Unit.first;
-  String event_type = '';
 
   String dropdownValue = list.first;
-
-  _ChooseEvent() {
-    if (dropdownValue == 'Techinical') {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Choose Event'),
-              content: SizedBox(
-                height: 200,
-                width: 200,
-                child: ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(list[index]),
-                      onTap: () {
-                        setState(() {
-                          event_type = list[index];
-                        });
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
-                ),
-              ),
-            );
-          });
-    }
-  }
 
   Uint8List? _file;
   bool _filepicked = false;
@@ -105,7 +76,7 @@ class _CreateEventState extends State<CreateEvent> {
     print('uploading event');
     String result = await DBmethods().uploadEvent(
       inst: FirebaseAuth.instance.currentUser!.uid,
-      event: event_type,
+      event: title.text,
       description: description.text,
       date_time: selectedPickupDate,
       link: link.text,
@@ -169,6 +140,13 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextInput(hint: 'Title', controller: title),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextInput(hint: 'Description', controller: description),
             ),
             const SizedBox(
@@ -182,46 +160,11 @@ class _CreateEventState extends State<CreateEvent> {
             const SizedBox(
               height: 10,
             ),
-            const Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  'Event Category',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Spacer(),
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  onChanged: (String? value) => {
-                    setState(() {
-                      dropdownValue = value!;
-                    })
-                  },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        // style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                Spacer(),
-              ],
-            ),
             const SizedBox(
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20  ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
                   Text(

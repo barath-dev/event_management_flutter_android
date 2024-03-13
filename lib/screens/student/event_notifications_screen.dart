@@ -20,7 +20,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
             .snapshots(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data!.get('notifications').length == 0) {
+            try {
+              if (snapshot.data!.get('notifications').isEmpty) {
+                return const Center(
+                  child: Text('No Notifications'),
+                );
+              }
+            } catch (e) {
               return const Center(
                 child: Text('No Notifications'),
               );
