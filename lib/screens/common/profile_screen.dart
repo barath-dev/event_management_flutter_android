@@ -24,6 +24,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future<int> getParticipatedEvents() async {
+      int res = await DBmethods().getParticipatedEvents();
+      return res;
+    }
+
     return Scaffold(
         backgroundColor: const Color.fromARGB(155, 158, 158, 158),
         body: Padding(
@@ -114,13 +119,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           .get(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Text(
-                            'Participted Events :${DBmethods().getParticipatedEvents()}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          );
+                          return FutureBuilder(
+                              future: getParticipatedEvents(),
+                              builder: (context,snapshot){
+                                return Text(
+                                  'Participted Events : ${snapshot.data}',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                );
+                              
+                              });
                         } else {
                           return const Text(
                             'Participted Events : 0',

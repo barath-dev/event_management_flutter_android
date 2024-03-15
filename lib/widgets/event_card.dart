@@ -151,7 +151,7 @@ class _EventCardState extends State<EventCard> {
                       FirebaseFirestore.instance
                           .collection('notifications')
                           .doc(FirebaseAuth.instance.currentUser!.email)
-                          .set({
+                          .update({
                         'notifications': FieldValue.arrayUnion([
                           {
                             'title': 'Registered for ${widget.title}',

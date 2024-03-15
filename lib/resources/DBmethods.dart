@@ -49,7 +49,7 @@ class DBmethods {
           email: coordinatorEmail, password: password);
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('coordinators')
           .doc(coordinatorEmail)
           .set({
         'name': coordinatorName,
