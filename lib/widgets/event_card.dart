@@ -160,6 +160,13 @@ class _EventCardState extends State<EventCard> {
                           }
                         ])
                       });
+
+                      FirebaseFirestore.instance
+                          .collection('notifications')
+                          .doc(FirebaseAuth.instance.currentUser!.email)
+                          .update({
+                        'events registered': FieldValue.arrayUnion([widget.eid])
+                      });
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Registered')));
                     }

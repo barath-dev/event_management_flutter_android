@@ -115,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return Text(
-                            'Participted Events : ${snapshot.data?.docs.length}',
+                            'Participted Events :${DBmethods().getParticipatedEvents()}',
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.black,

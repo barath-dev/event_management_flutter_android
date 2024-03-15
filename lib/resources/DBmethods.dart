@@ -31,7 +31,7 @@ class DBmethods {
         'id': id,
         'imgUrl': imgUrl,
         'requests': [],
-        'inst' : inst,
+        'inst': inst,
       });
       return 'success';
     } on Exception catch (e) {
@@ -47,14 +47,21 @@ class DBmethods {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: coordinatorEmail, password: password);
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(coordinatorEmail)
+          .set({
+        'name': coordinatorName,
+        'email': coordinatorEmail,
+        'role': 'coordinator',
+        'inst': Institute,
+      });
     } catch (e) {
       return e.toString();
     }
     return 'success';
   }
-
-
-
 
   Future<String> getName() async {
     String name = '';
@@ -69,8 +76,6 @@ class DBmethods {
     return name;
   }
 
-
-
   Future<bool> hasRegistered(String eid) async {
     bool hasRegistered = false;
     await FirebaseFirestore.instance
@@ -84,5 +89,25 @@ class DBmethods {
     return hasRegistered;
   }
 
-
+  Future<int> getParticipatedEvents() async {
+    int count = 0;
+    await FirebaseFirestore.instance
+        .collection('events')
+        .where('requests',
+            arrayContains: FirebaseAuth.instance.currentUser!.email)
+        .where('date_time', isLessThan: DateTime.now().toString())
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) async {
+                await FirebaseFirestore.instance
+                    .collection('events')
+                    .doc(element.toString())
+                    .get();
+                    if (element['date_time'].isBefore(DateTime.now())) {
+                      count++;
+                    }
+              })
+            });
+    return count;
+  }
 }
